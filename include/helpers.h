@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <stdio.h> // remove printf and this header before submitting
+#include <stdio.h>
 
 /* Allowed: 
     malloc(3)
