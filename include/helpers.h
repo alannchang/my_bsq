@@ -6,7 +6,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-/* Allowed: 
+/* 
+    Allowed: 
     malloc(3)
     free(3)
     open(2)
