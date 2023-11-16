@@ -11,7 +11,6 @@
     write(2)
 */
 
-
 int main(int ac, char** av){
 
     if(check_arg_ct(ac) != 0) return -1;
@@ -54,6 +53,7 @@ int main(int ac, char** av){
             cmp_val(matrix[row_index][i], &max_pt, row_index, i);
         }
         row_index++;
+        free(row);
     }
 
     // TEST PRINT MATRIX
@@ -64,13 +64,16 @@ int main(int ac, char** av){
         printf("\n");
     }
 
-    // Invalid map
+    // invalid map or no squares found
     if (max_pt.row == -1){
         write(2, "INVALID MAP", 11);
         return -1;
     } 
 
     printf("Value:%d Row:%d Col:%d\n", max_pt.val, max_pt.row, max_pt.col); // TEST PRINT
+
+    free(first_row);
+    close(fd);
 
 
     return 0;
