@@ -11,11 +11,6 @@
     write(2)
 */
 
-/* 
-GAME PLAN:
--read map file, line by line
--
-*/
 
 int main(int ac, char** av){
 
@@ -37,7 +32,11 @@ int main(int ac, char** av){
     for (int i = 0; i < line_ct; i++){
         if (first_row[i] == '.') matrix[0][i] = 1;
         else if (first_row[i] == 'o') matrix[0][i] = 0;
-        if (matrix[0][i] > max_pt.val) max_pt.val = matrix[0][i];
+        if (matrix[0][i] > max_pt.val) {
+            max_pt.val = matrix[0][i];
+            max_pt.row = 0;
+            max_pt.col = i;
+        }
     }
 
     // the rest of the map
@@ -48,14 +47,25 @@ int main(int ac, char** av){
         // first character
         if (row[0] == '.') matrix[row_index][0] = 1;
         else if (row[0] == 'o') matrix[row_index][0] = 0;
+        if (matrix[row_index][0] > max_pt.val){
+            max_pt.val = matrix[row_index][0];
+            max_pt.row = row_index;
+            max_pt.col = 0;
+        }
         // rest of the characters
         for (int i = 1; i < line_ct; i++){
             if (row[i] == 'o') matrix[row_index][i] = 0;
             else matrix[row_index][i] = my_min(matrix[row_index][i - 1], matrix[row_index - 1][i], matrix[row_index - 1][i - 1]) + 1;
+            if (matrix[row_index][i] > max_pt.val) {
+                max_pt.val = matrix[row_index][i];
+                max_pt.row = row_index;
+                max_pt.col = i;
+            }
         }
         row_index++;
     }
 
+    // TEST PRINT MATRIX
     for (int i = 0; i < line_ct; i++){
         for (int j = 0; j < line_ct; j++){
             printf("%d", matrix[i][j]);
@@ -63,7 +73,7 @@ int main(int ac, char** av){
         printf("\n");
     }
 
-    printf("\n");
+    printf("Value:%d Row:%d Col:%d\n", max_pt.val, max_pt.row, max_pt.col);
 
 
     return 0;

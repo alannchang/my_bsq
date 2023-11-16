@@ -14,6 +14,4 @@ typedef struct{
     int val;
 } max_pt;
 
-void compare_max(int **matrix, int *max);
-
 #endif
