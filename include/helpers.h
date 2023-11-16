@@ -19,12 +19,4 @@
 
 char* my_readline(int fd);
 
-int check_arg_ct(int ac);
-
-int get_line_ct(int fd);
-
-int my_min(int a, int b, int c);
-
-
-
 #endif

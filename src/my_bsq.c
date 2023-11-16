@@ -16,15 +16,16 @@ int main(int ac, char** av){
 
     if(check_arg_ct(ac) != 0) return -1;
 
-    
     int fd = open(av[1], O_RDONLY);
 
     // read first line, store as integer
     int line_ct = get_line_ct(fd);
     printf("Row count: %d\n", line_ct); // TEST PRINT
+
     // create matrix
     int matrix[line_ct][line_ct];
     max_pt max_pt;
+    max_pt.row = -1;
     max_pt.val = 0;
 
     // first row of the map
@@ -32,11 +33,7 @@ int main(int ac, char** av){
     for (int i = 0; i < line_ct; i++){
         if (first_row[i] == '.') matrix[0][i] = 1;
         else if (first_row[i] == 'o') matrix[0][i] = 0;
-        if (matrix[0][i] > max_pt.val) {
-            max_pt.val = matrix[0][i];
-            max_pt.row = 0;
-            max_pt.col = i;
-        }
+        cmp_val(matrix[0][i], &max_pt, 0, i);
     }
 
     // the rest of the map
@@ -44,23 +41,17 @@ int main(int ac, char** av){
     int row_index = 1;
 
     while ((row = my_readline(fd)) != NULL){
+
         // first character
         if (row[0] == '.') matrix[row_index][0] = 1;
         else if (row[0] == 'o') matrix[row_index][0] = 0;
-        if (matrix[row_index][0] > max_pt.val){
-            max_pt.val = matrix[row_index][0];
-            max_pt.row = row_index;
-            max_pt.col = 0;
-        }
+        cmp_val(matrix[row_index][0], &max_pt, row_index, 0);
+
         // rest of the characters
         for (int i = 1; i < line_ct; i++){
             if (row[i] == 'o') matrix[row_index][i] = 0;
             else matrix[row_index][i] = my_min(matrix[row_index][i - 1], matrix[row_index - 1][i], matrix[row_index - 1][i - 1]) + 1;
-            if (matrix[row_index][i] > max_pt.val) {
-                max_pt.val = matrix[row_index][i];
-                max_pt.row = row_index;
-                max_pt.col = i;
-            }
+            cmp_val(matrix[row_index][i], &max_pt, row_index, i);
         }
         row_index++;
     }
@@ -73,7 +64,13 @@ int main(int ac, char** av){
         printf("\n");
     }
 
-    printf("Value:%d Row:%d Col:%d\n", max_pt.val, max_pt.row, max_pt.col);
+    // Invalid map
+    if (max_pt.row == -1){
+        write(2, "INVALID MAP", 11);
+        return -1;
+    } 
+
+    printf("Value:%d Row:%d Col:%d\n", max_pt.val, max_pt.row, max_pt.col); // TEST PRINT
 
 
     return 0;

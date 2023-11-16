@@ -1,4 +1,5 @@
 #include "../include/helpers.h"
+#include "../include/my_bsq.h"
 
 int check_arg_ct(int ac){
     if (ac != 2){
@@ -23,4 +24,12 @@ int my_min(int a, int b, int c){
     if (b < min) min = b;
     if (c < min) min = c;
     return min;
+}
+
+void cmp_val(int current, max_pt *max_pt, int current_row, int current_col){
+    if (current > max_pt->val){
+        max_pt->val = current;
+        max_pt->row = current_row;
+        max_pt->col = current_col;
+    }
 }
