@@ -19,7 +19,12 @@ int main(int ac, char** av){
 
     if(check_arg_ct(ac) != 0) return -1;
 
-    int fd = open(av[1], O_RDONLY);
+    int fd;
+
+    if ((fd = open(av[1], O_RDONLY)) == -1){
+        write(2, "FILE ERROR", 10);
+        return -1;
+    }
 
     // read first line, store as integer
     int line_ct = get_line_ct(fd);

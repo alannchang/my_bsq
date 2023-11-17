@@ -21,7 +21,7 @@ Printing your report:
  [97;1;40m     REPORT      [0m  [97m MY-BSQ  [0m 
 
  Status             [91mFAILURE[0m   
- Execution Runtime  0.052807  
+ Execution Runtime  0.050391  
  Score              [[33m-[0m[33m-[0m[33m-[0m] 0/3 
 
 
