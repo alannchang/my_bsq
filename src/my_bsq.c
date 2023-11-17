@@ -34,6 +34,7 @@ int main(int ac, char** av){
         else if (first_row[i] == 'o') matrix[0][i] = 0;
         cmp_val(matrix[0][i], &max_pt, 0, i);
     }
+    free(first_row);
 
     // the rest of the map
     char *row = NULL;
@@ -71,8 +72,6 @@ int main(int ac, char** av){
     } 
 
     printf("Value:%d Row:%d Col:%d\n", max_pt.val, max_pt.row, max_pt.col); // TEST PRINT
-
-    free(first_row);
     close(fd);
 
 

@@ -11,6 +11,7 @@ int check_arg_ct(int ac){
 
 int get_line_ct(int fd){
     char* first_line = my_readline(fd);
+    
     int num = 0;
     int i = 0;
     while (first_line[i] >= '0' && first_line[i] <= '9'){
