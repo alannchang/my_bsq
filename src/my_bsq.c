@@ -102,7 +102,8 @@ int main(int ac, char** av){
             printf("\n");
         
         } else {
-            printf("%s\n", row);
+            printf("%s", row);
+            printf("\n");
         }
 
         row_index++;
