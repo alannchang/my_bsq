@@ -40,11 +40,23 @@ void cmp_val(int current, max_pt *max_pt, int current_row, int current_col){
     }
 }
 
-max_pt get_max_pt(int fd, int line_ct){
-    int matrix[line_ct][line_ct];
+max_pt init_max_pt(){
     max_pt max_pt;
     max_pt.row = -1;
     max_pt.val = 0;
+    return max_pt;
+}
+
+row init_row(int index){
+    row row;
+    row.str = NULL;
+    row.index = index;
+    return row;
+}
+
+max_pt get_max_pt(int fd, int line_ct){
+    int matrix[line_ct][line_ct];
+    max_pt max_pt = init_max_pt();
 
     // first row of the map
     char *first_row = my_readline(fd);
@@ -56,24 +68,23 @@ max_pt get_max_pt(int fd, int line_ct){
     free(first_row);
 
     // the rest of the map
-    char *row = NULL;
-    int row_index = 1;
+    row row = init_row(1);
 
-    while ((row = my_readline(fd)) != NULL){
+    while ((row.str = my_readline(fd)) != NULL){
 
         // first character
-        if (row[0] == EMPTY) matrix[row_index][0] = 1;
-        else if (row[0] == OBSTACLE) matrix[row_index][0] = 0;
-        cmp_val(matrix[row_index][0], &max_pt, row_index, 0);
+        if (row.str[0] == EMPTY) matrix[row.index][0] = 1;
+        else if (row.str[0] == OBSTACLE) matrix[row.index][0] = 0;
+        cmp_val(matrix[row.index][0], &max_pt, row.index, 0);
 
         // rest of the characters
         for (int i = 1; i < line_ct; i++){
-            if (row[i] == OBSTACLE) matrix[row_index][i] = 0;
-            else matrix[row_index][i] = my_min(matrix[row_index][i - 1], matrix[row_index - 1][i], matrix[row_index - 1][i - 1]) + 1;
-            cmp_val(matrix[row_index][i], &max_pt, row_index, i);
+            if (row.str[i] == OBSTACLE) matrix[row.index][i] = 0;
+            else matrix[row.index][i] = my_min(matrix[row.index][i - 1], matrix[row.index - 1][i], matrix[row.index - 1][i - 1]) + 1;
+            cmp_val(matrix[row.index][i], &max_pt, row.index, i);
         }
-        row_index++;
-        free(row);
+        row.index++;
+        free(row.str);
     }
     close(fd);
     return max_pt;
@@ -86,24 +97,23 @@ int print_solution(char *map_file, max_pt max_pt, int line_ct){
     char *pass_line_ct = my_readline(fd); // skip first line (line count)
     free(pass_line_ct);
 
-    char *row = NULL;
-    int row_index = 0;
+    row row = init_row(0);
     max_pt.val--;
-    while ((row = my_readline(fd)) != NULL){
-        if (row_index >= max_pt.row - max_pt.val && row_index <= max_pt.row){
+    while ((row.str = my_readline(fd)) != NULL){
+        if (row.index >= max_pt.row - max_pt.val && row.index <= max_pt.row){
             for (int i = 0; i < line_ct; i++){
                 if (i >= max_pt.col - max_pt.val && i <= max_pt.col) printf("%c", SQUARE);
-                else (printf("%c", row[i]));
+                else (printf("%c", row.str[i]));
             }
             printf("\n");
         
         } else {
-            printf("%s", row);
+            printf("%s", row.str);
             printf("\n");
         }
 
-        row_index++;
-        free(row);
+        row.index++;
+        free(row.str);
     }
     close(fd);
     return 0;

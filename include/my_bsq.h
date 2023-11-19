@@ -18,6 +18,11 @@ typedef struct{
     int val;
 } max_pt;
 
+typedef struct{
+    int index;
+    char *str;
+} row;
+
 int check_arg_ct(int ac);
 
 int get_line_ct(int fd);
