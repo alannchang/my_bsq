@@ -26,7 +26,7 @@ int my_min(int a, int b, int c);
 
 void cmp_val(int current, max_pt *max_pt, int current_row, int current_col);
 
-max_pt create_matrix(int fd, int line_ct);
+max_pt get_max_pt(int fd, int line_ct);
 
 int print_solution(char *map_file, max_pt max_pt, int line_ct);
 

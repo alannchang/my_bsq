@@ -2,14 +2,18 @@
 
 int check_arg_ct(int ac){
     if (ac != 2){
-        write(2, "ERROR",5);
+        write(2, "INVALID NUMBER OF ARGUMENTS", 27);
         return -1;
     }
     return 0;
 }
 
 int get_line_ct(int fd){
-    char* first_line = my_readline(fd);
+    char* first_line = NULL;
+    if ((first_line = my_readline(fd)) == NULL){
+        write(2, "INVALID MAP", 11);
+        return -1;
+    }
     
     int num = 0;
     int i = 0;
@@ -36,7 +40,7 @@ void cmp_val(int current, max_pt *max_pt, int current_row, int current_col){
     }
 }
 
-max_pt create_matrix(int fd, int line_ct){
+max_pt get_max_pt(int fd, int line_ct){
     int matrix[line_ct][line_ct];
     max_pt max_pt;
     max_pt.row = -1;
@@ -71,6 +75,7 @@ max_pt create_matrix(int fd, int line_ct){
         row_index++;
         free(row);
     }
+    close(fd);
     return max_pt;
 }
 
@@ -100,5 +105,6 @@ int print_solution(char *map_file, max_pt max_pt, int line_ct){
         row_index++;
         free(row);
     }
+    close(fd);
     return 0;
 }
