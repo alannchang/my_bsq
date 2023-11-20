@@ -54,11 +54,7 @@ row init_row(int index){
     return row;
 }
 
-max_pt get_max_pt(int fd, int line_ct){
-    int matrix[line_ct][line_ct];
-    max_pt max_pt = init_max_pt();
-
-    // first row of the map
+void process_first_row(int fd, int line_ct, int matrix[][line_ct], max_pt max_pt){
     char *first_row = my_readline(fd);
     for (int i = 0; i < line_ct; i++){
         if (first_row[i] == EMPTY) matrix[0][i] = 1;
@@ -66,6 +62,13 @@ max_pt get_max_pt(int fd, int line_ct){
         cmp_val(matrix[0][i], &max_pt, 0, i);
     }
     free(first_row);
+}
+
+max_pt get_max_pt(int fd, int line_ct){
+    int matrix[line_ct][line_ct];
+    max_pt max_pt = init_max_pt();
+
+    process_first_row(fd, line_ct, matrix, max_pt);
 
     // the rest of the map
     row row = init_row(1);
