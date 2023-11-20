@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include "helpers.h"
+#include "my_readline.h"
 
 #define EMPTY '.'
 #define OBSTACLE 'o'
