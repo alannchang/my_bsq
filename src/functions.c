@@ -21,6 +21,7 @@ int get_line_ct(int fd){
         num = num * 10 + (first_line[i] - '0');
         i++;
     }
+
     free(first_line);
     return num;
 }
@@ -99,8 +100,8 @@ max_pt get_max_pt(int fd, int line_ct){
 int print_solution(char *map_file, max_pt max_pt, int line_ct){
     int fd = open(map_file, O_RDONLY);
     
-    char *skip_line_ct = my_readline(fd);
-    free(skip_line_ct);
+    char *skip_first_line = my_readline(fd);
+    free(skip_first_line);
 
     row row = init_row(0);
     while ((row.str = my_readline(fd)) != NULL){
