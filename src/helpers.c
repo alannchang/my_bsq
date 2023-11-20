@@ -54,23 +54,15 @@ row init_row(int index){
     return row;
 }
 
-void process_first_row(int fd, int line_ct, int matrix[][line_ct], max_pt max_pt){
+void find_bsq(int fd, int line_ct, int **matrix, max_pt *max_pt){
     char *first_row = my_readline(fd);
     for (int i = 0; i < line_ct; i++){
         if (first_row[i] == EMPTY) matrix[0][i] = 1;
         else if (first_row[i] == OBSTACLE) matrix[0][i] = 0;
-        cmp_val(matrix[0][i], &max_pt, 0, i);
+        cmp_val(matrix[0][i], max_pt, 0, i);
     }
     free(first_row);
-}
 
-max_pt get_max_pt(int fd, int line_ct){
-    int matrix[line_ct][line_ct];
-    max_pt max_pt = init_max_pt();
-
-    process_first_row(fd, line_ct, matrix, max_pt);
-
-    // the rest of the map
     row row = init_row(1);
 
     while ((row.str = my_readline(fd)) != NULL){
@@ -78,18 +70,30 @@ max_pt get_max_pt(int fd, int line_ct){
         // first character
         if (row.str[0] == EMPTY) matrix[row.index][0] = 1;
         else if (row.str[0] == OBSTACLE) matrix[row.index][0] = 0;
-        cmp_val(matrix[row.index][0], &max_pt, row.index, 0);
+        cmp_val(matrix[row.index][0], max_pt, row.index, 0);
 
         // rest of the characters
         for (int i = 1; i < line_ct; i++){
             if (row.str[i] == OBSTACLE) matrix[row.index][i] = 0;
             else matrix[row.index][i] = my_min(matrix[row.index][i - 1], matrix[row.index - 1][i], matrix[row.index - 1][i - 1]) + 1;
-            cmp_val(matrix[row.index][i], &max_pt, row.index, i);
+            cmp_val(matrix[row.index][i], max_pt, row.index, i);
         }
         row.index++;
         free(row.str);
     }
     close(fd);
+}
+
+max_pt get_max_pt(int fd, int line_ct){
+    int **matrix = (int **) malloc(line_ct * sizeof(int *));
+    for (int i = 0; i < line_ct; i++) matrix[i] = (int *) malloc(line_ct * sizeof(int));
+
+    max_pt max_pt = init_max_pt();
+
+    find_bsq(fd, line_ct, matrix, &max_pt);
+
+    for (int i = 0; i < line_ct; i++) free(matrix[i]);
+    free(matrix);
     return max_pt;
 }
 
