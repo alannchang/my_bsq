@@ -25,21 +25,6 @@ int get_line_ct(int fd){
     return num;
 }
 
-int my_min(int a, int b, int c){
-    int min = a;
-    if (b < min) min = b;
-    if (c < min) min = c;
-    return min;
-}
-
-void cmp_val(int current, max_pt *max_pt, int current_row, int current_col){
-    if (current > max_pt->val){
-        max_pt->val = current;
-        max_pt->row = current_row;
-        max_pt->col = current_col;
-    }
-}
-
 max_pt init_max_pt(){
     max_pt max_pt;
     max_pt.row = -1;
@@ -54,6 +39,21 @@ row init_row(int index){
     return row;
 }
 
+void cmp_val(int current, max_pt *max_pt, int current_row, int current_col){
+    if (current > max_pt->val){
+        max_pt->val = current;
+        max_pt->row = current_row;
+        max_pt->col = current_col;
+    }
+}
+
+int my_min(int a, int b, int c){
+    int min = a;
+    if (b < min) min = b;
+    if (c < min) min = c;
+    return min;
+}
+
 void find_bsq(int fd, int line_ct, int **matrix, max_pt *max_pt){
     char *first_row = my_readline(fd);
     for (int i = 0; i < line_ct; i++){
@@ -64,7 +64,6 @@ void find_bsq(int fd, int line_ct, int **matrix, max_pt *max_pt){
     free(first_row);
 
     row row = init_row(1);
-
     while ((row.str = my_readline(fd)) != NULL){
 
         // first character
@@ -97,15 +96,13 @@ max_pt get_max_pt(int fd, int line_ct){
     return max_pt;
 }
 
-
 int print_solution(char *map_file, max_pt max_pt, int line_ct){
     int fd = open(map_file, O_RDONLY);
     
-    char *pass_line_ct = my_readline(fd); // skip first line (line count)
-    free(pass_line_ct);
+    char *skip_line_ct = my_readline(fd);
+    free(skip_line_ct);
 
     row row = init_row(0);
-    max_pt.val--;
     while ((row.str = my_readline(fd)) != NULL){
         if (row.index >= max_pt.row - max_pt.val && row.index <= max_pt.row){
             for (int i = 0; i < line_ct; i++){
