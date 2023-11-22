@@ -86,13 +86,13 @@ void find_bsq(int fd, char *first_row, dimensions dim, int **matrix, max_pt *max
 max_pt get_max_pt(int fd, char *first_row, dimensions dim){
 
     int **matrix = (int **) malloc(dim.rows * sizeof(int *));
-    for (int i = 0; i < dim.cols; i++) matrix[i] = (int *) malloc(dim.cols * sizeof(int));
+    for (int i = 0; i < dim.rows; i++) matrix[i] = (int *) malloc(dim.cols * sizeof(int));
 
     max_pt max_pt = init_max_pt();
 
     find_bsq(fd, first_row, dim, matrix, &max_pt);
 
-    for (int i = 0; i < dim.cols; i++) free(matrix[i]);
+    for (int i = 0; i < dim.rows; i++) free(matrix[i]);
     free(matrix);
     return max_pt;
 }
