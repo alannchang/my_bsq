@@ -22,6 +22,11 @@ typedef struct{
     char *str;
 } row;
 
+typedef struct{
+    int rows;
+    int cols;
+} dimensions;
+
 int check_arg_ct(int ac);
 
 int get_line_ct(int fd);
@@ -30,7 +35,7 @@ int my_min(int a, int b, int c);
 
 void cmp_val(int current, max_pt *max_pt, int current_row, int current_col);
 
-max_pt get_max_pt(int fd, int line_ct);
+max_pt get_max_pt(int fd, dimensions dim);
 
 int print_solution(char *map_file, max_pt max_pt, int line_ct);
 

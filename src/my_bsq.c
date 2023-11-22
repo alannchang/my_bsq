@@ -21,10 +21,10 @@ int main(int ac, char** av){
         return -1;
     }
 
-    int line_ct; // read first line, store as integer
-    if ((line_ct = get_line_ct(fd)) == -1 ) return -1;
+    dimensions dim;
+    if ((dim.rows = get_line_ct(fd)) == -1 ) return -1;
 
-    max_pt max_pt = get_max_pt(fd, line_ct);
+    max_pt max_pt = get_max_pt(fd, dim.rows);
 
     if (max_pt.row == -1){ // invalid map or no squares found
         write(2, "INVALID MAP", 11);
@@ -32,7 +32,7 @@ int main(int ac, char** av){
     }
 
     max_pt.val--; // easier value to work with
-    print_solution(av[1], max_pt, line_ct);
+    print_solution(av[1], max_pt, dim.rows);
 
     return 0;
 }

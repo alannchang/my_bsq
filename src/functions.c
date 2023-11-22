@@ -1,5 +1,7 @@
 #include "../include/my_bsq.h"
 
+#include <string.h>
+
 int check_arg_ct(int ac){
     if (ac != 2){
         write(2, "INVALID NUMBER OF ARGUMENTS", 27);
@@ -55,9 +57,8 @@ int my_min(int a, int b, int c){
     return min;
 }
 
-void find_bsq(int fd, int line_ct, int **matrix, max_pt *max_pt){
-    char *first_row = my_readline(fd);
-    for (int i = 0; i < line_ct; i++){
+void find_bsq(int fd, char *first_row, dimensions dim, int **matrix, max_pt *max_pt){
+    for (int i = 0; i < dim.cols; i++){
         if (first_row[i] == EMPTY) matrix[0][i] = 1;
         else if (first_row[i] == OBSTACLE) matrix[0][i] = 0;
         cmp_val(matrix[0][i], max_pt, 0, i);
@@ -73,7 +74,7 @@ void find_bsq(int fd, int line_ct, int **matrix, max_pt *max_pt){
         cmp_val(matrix[row.index][0], max_pt, row.index, 0);
 
         // rest of the characters
-        for (int i = 1; i < line_ct; i++){
+        for (int i = 1; i < dim.cols; i++){
             if (row.str[i] == OBSTACLE) matrix[row.index][i] = 0;
             else matrix[row.index][i] = my_min(matrix[row.index][i - 1], matrix[row.index - 1][i], matrix[row.index - 1][i - 1]) + 1;
             cmp_val(matrix[row.index][i], max_pt, row.index, i);
@@ -84,15 +85,17 @@ void find_bsq(int fd, int line_ct, int **matrix, max_pt *max_pt){
     close(fd);
 }
 
-max_pt get_max_pt(int fd, int line_ct){
-    int **matrix = (int **) malloc(line_ct * sizeof(int *));
-    for (int i = 0; i < line_ct; i++) matrix[i] = (int *) malloc(line_ct * sizeof(int));
+max_pt get_max_pt(int fd, dimensions dim){
+    char *first_row = my_readline(fd);
+    dim.cols = strlen(first_row);
+    int **matrix = (int **) malloc(dim.rows * sizeof(int *));
+    for (int i = 0; i < dim.cols; i++) matrix[i] = (int *) malloc(dim.cols * sizeof(int));
 
     max_pt max_pt = init_max_pt();
 
-    find_bsq(fd, line_ct, matrix, &max_pt);
+    find_bsq(fd, first_row, dim, matrix, &max_pt);
 
-    for (int i = 0; i < line_ct; i++) free(matrix[i]);
+    for (int i = 0; i < dim.cols; i++) free(matrix[i]);
     free(matrix);
     return max_pt;
 }
