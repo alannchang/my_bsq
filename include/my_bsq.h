@@ -35,8 +35,8 @@ int my_min(int a, int b, int c);
 
 void cmp_val(int current, max_pt *max_pt, int current_row, int current_col);
 
-max_pt get_max_pt(int fd, dimensions dim);
+max_pt get_max_pt(int fd, char *first_row, dimensions dim);
 
-int print_solution(char *map_file, max_pt max_pt, int line_ct);
+int print_solution(char *map_file, max_pt max_pt, dimensions dim);
 
 #endif

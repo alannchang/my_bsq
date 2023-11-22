@@ -1,7 +1,5 @@
 #include "../include/my_bsq.h"
 
-#include <string.h>
-
 int check_arg_ct(int ac){
     if (ac != 2){
         write(2, "INVALID NUMBER OF ARGUMENTS", 27);
@@ -85,9 +83,8 @@ void find_bsq(int fd, char *first_row, dimensions dim, int **matrix, max_pt *max
     close(fd);
 }
 
-max_pt get_max_pt(int fd, dimensions dim){
-    char *first_row = my_readline(fd);
-    dim.cols = strlen(first_row);
+max_pt get_max_pt(int fd, char *first_row, dimensions dim){
+
     int **matrix = (int **) malloc(dim.rows * sizeof(int *));
     for (int i = 0; i < dim.cols; i++) matrix[i] = (int *) malloc(dim.cols * sizeof(int));
 
@@ -100,7 +97,7 @@ max_pt get_max_pt(int fd, dimensions dim){
     return max_pt;
 }
 
-int print_solution(char *map_file, max_pt max_pt, int line_ct){
+int print_solution(char *map_file, max_pt max_pt, dimensions dim){
     int fd = open(map_file, O_RDONLY);
     
     char *skip_first_line = my_readline(fd);
@@ -109,7 +106,7 @@ int print_solution(char *map_file, max_pt max_pt, int line_ct){
     row row = init_row(0);
     while ((row.str = my_readline(fd)) != NULL){
         if (row.index >= max_pt.row - max_pt.val && row.index <= max_pt.row){
-            for (int i = 0; i < line_ct; i++){
+            for (int i = 0; i < dim.cols; i++){
                 if (i >= max_pt.col - max_pt.val && i <= max_pt.col) printf("%c", SQUARE);
                 else (printf("%c", row.str[i]));
             }

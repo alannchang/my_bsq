@@ -1,14 +1,6 @@
 #include "../include/my_bsq.h"
 
-/* Allowed functions: 
-    malloc(3)
-    free(3)
-    open(2)
-    read(2)
-    close(2)
-    printf(3)
-    write(2)
-*/
+#include <string.h>
 
 int main(int ac, char** av){
 
@@ -24,7 +16,15 @@ int main(int ac, char** av){
     dimensions dim;
     if ((dim.rows = get_line_ct(fd)) == -1 ) return -1;
 
-    max_pt max_pt = get_max_pt(fd, dim.rows);
+    char *first_row;
+    if ((first_row = my_readline(fd)) == NULL) {
+        write(2, "INVALID MAP", 11);
+        return -1;
+    }
+        
+    dim.cols = strlen(first_row);
+
+    max_pt max_pt = get_max_pt(fd, first_row, dim);
 
     if (max_pt.row == -1){ // invalid map or no squares found
         write(2, "INVALID MAP", 11);
@@ -32,7 +32,7 @@ int main(int ac, char** av){
     }
 
     max_pt.val--; // easier value to work with
-    print_solution(av[1], max_pt, dim.rows);
+    print_solution(av[1], max_pt, dim);
 
     return 0;
 }
