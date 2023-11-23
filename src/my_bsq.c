@@ -1,7 +1,5 @@
 #include "../include/my_bsq.h"
 
-#include <string.h>
-
 int main(int ac, char** av){
 
     if(check_arg_ct(ac) != 0) return -1;
@@ -22,7 +20,7 @@ int main(int ac, char** av){
         return -1;
     }
         
-    dim.cols = strlen(first_row);
+    dim.cols = my_strlen(first_row);
 
     max_pt max_pt = get_max_pt(fd, first_row, dim);
 

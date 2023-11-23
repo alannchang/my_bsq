@@ -1,5 +1,14 @@
 #include "../include/my_bsq.h"
 
+int my_strlen(char *str){
+    int len = 0;
+    while(*str != '\0'){
+        len++;
+        str++;
+    }
+    return len;
+}
+
 int check_arg_ct(int ac){
     if (ac != 2){
         write(2, "INVALID NUMBER OF ARGUMENTS", 27);
