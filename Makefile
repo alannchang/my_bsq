@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 TARGET = my_bsq
 SRC_DIR = src
 INCLUDE_DIR = include

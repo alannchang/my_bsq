@@ -12,16 +12,16 @@ int my_strlen(char *str){
 int check_arg_ct(int ac){
     if (ac != 2){
         write(2, "INVALID NUMBER OF ARGUMENTS", 27);
-        return -1;
+        return EXIT_FAILURE;
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int get_line_ct(int fd){
     char* first_line = NULL;
     if ((first_line = my_readline(fd)) == NULL){
         write(2, "INVALID MAP", 11);
-        return -1;
+        return EXIT_FAILURE;
     }
     
     int num = 0;
@@ -93,11 +93,25 @@ void find_bsq(int fd, char *first_row, dimensions dim, int **matrix, max_pt *max
 }
 
 max_pt get_max_pt(int fd, char *first_row, dimensions dim){
-
-    int **matrix = (int **) malloc(dim.rows * sizeof(int *));
-    for (int i = 0; i < dim.rows; i++) matrix[i] = (int *) malloc(dim.cols * sizeof(int));
-
+    
     max_pt max_pt = init_max_pt();
+    
+    int **matrix = (int **) malloc(dim.rows * sizeof(int *));
+    if (matrix == NULL) {
+        write(2, "MEMORY ALLOCATION FAILED", 24);
+        return max_pt;
+    }
+
+    for (int i = 0; i < dim.rows; i++){
+        matrix[i] = (int *) malloc(dim.cols * sizeof(int));
+
+        if (matrix[i] == NULL) {
+            write(2, "MEMORY ALLOCATION FAILED", 24);
+            for (int j = 0; j < i; j++) free(matrix[j]); // Free the previously allocated rows
+            free(matrix); // Free the array of row pointers
+            return max_pt;
+        } 
+    }
 
     find_bsq(fd, first_row, dim, matrix, &max_pt);
 
@@ -130,5 +144,5 @@ int print_solution(char *map_file, max_pt max_pt, dimensions dim){
         free(row.str);
     }
     close(fd);
-    return 0;
+    return EXIT_SUCCESS;
 }

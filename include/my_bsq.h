@@ -1,13 +1,16 @@
 #ifndef MY_BSQ_MY_BSQ_H
 #define MY_BSQ_MY_BSQ_H
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include "my_readline.h"
+
 #define EMPTY '.'
 #define OBSTACLE 'o'
 #define SQUARE 'x'
+
 typedef struct{
     int row;
     int col;
